@@ -13,12 +13,15 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+import com.springsecurity.learning.handlers.CustomAccessDeniedHandler;
 import com.springsecurity.learning.services.AuthenticationService;
 
 import jakarta.servlet.http.Cookie;
@@ -48,7 +51,9 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(
 			HttpSecurity httpSecurity, 
 			UsernamePasswordAuthFilter usernamePasswordAuthFilter,
-			CookieAuthFilter cookieAuthFilter
+			CookieAuthFilter cookieAuthFilter,
+			AuthenticationEntryPoint customAuthenticationEntryPoint,
+			CustomAccessDeniedHandler customAccessDeniedHandler
 			) throws Exception {
 		
 		/*Configure the logout handler*/
@@ -59,11 +64,17 @@ public class SecurityConfig {
         };
 		
 		httpSecurity
+			.exceptionHandling()
+			.authenticationEntryPoint(customAuthenticationEntryPoint)
+			.and()
+			.exceptionHandling()
+			.accessDeniedHandler(customAccessDeniedHandler)
+			.and()
 			.logout()
 			.logoutUrl(LOGOUT_ENDPOINT)
 			.logoutSuccessHandler(logoutSuccessHandler)
 			.and()
-			.addFilterAfter(usernamePasswordAuthFilter, LogoutFilter.class)
+			.addFilterBefore(usernamePasswordAuthFilter, ExceptionTranslationFilter.class)
 			.addFilterAfter(cookieAuthFilter,UsernamePasswordAuthFilter.class)
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
