@@ -61,17 +61,18 @@ public class UsernamePasswordAuthFilter extends OncePerRequestFilter {
             
             UsernamePasswordAuthenticationToken userToken = new UsernamePasswordAuthenticationToken(credentialsDto.getUsername(), 
                     credentialsDto.getPassword());
-            Authentication auth = this.authenticationManager.authenticate(userToken);
             
-            SecurityContextHolder.getContext().setAuthentication(auth);
-            Cookie cookie = new Cookie(COOKIE_NAME, authenticationService.createToken(
-            			(String)auth.getPrincipal()
-            		));
-            response.addCookie(cookie);
+            Authentication auth = this.authenticationManager.authenticate(userToken);
+				SecurityContextHolder.getContext().setAuthentication(auth);
+	            Cookie cookie = new Cookie(COOKIE_NAME, authenticationService.createToken(
+	            			(String)auth.getPrincipal()
+	            		));
+	            response.addCookie(cookie);
         }
+		filterChain.doFilter(request, response);
 
 		
-		filterChain.doFilter(request, response);
+		
 	}
 	
 	

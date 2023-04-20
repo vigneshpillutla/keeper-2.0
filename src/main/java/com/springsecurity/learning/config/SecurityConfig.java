@@ -20,8 +20,8 @@ import org.springframework.security.web.authentication.logout.CookieClearingLogo
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import com.springsecurity.learning.handlers.CustomAccessDeniedHandler;
 import com.springsecurity.learning.services.AuthenticationService;
 
 import jakarta.servlet.http.Cookie;
@@ -46,14 +46,13 @@ public class SecurityConfig {
 	public AuthenticationManager authenticationManager(CustomAuthenticationProvider customAuthenticationProvider) {
 		return new ProviderManager(customAuthenticationProvider);
 	}
-
+	
 	@Bean
 	public SecurityFilterChain filterChain(
 			HttpSecurity httpSecurity, 
 			UsernamePasswordAuthFilter usernamePasswordAuthFilter,
 			CookieAuthFilter cookieAuthFilter,
-			AuthenticationEntryPoint customAuthenticationEntryPoint,
-			CustomAccessDeniedHandler customAccessDeniedHandler
+			AuthenticationExceptionHandler authenticationExceptionHandler
 			) throws Exception {
 		
 		/*Configure the logout handler*/
@@ -64,18 +63,13 @@ public class SecurityConfig {
         };
 		
 		httpSecurity
-			.exceptionHandling()
-			.authenticationEntryPoint(customAuthenticationEntryPoint)
-			.and()
-			.exceptionHandling()
-			.accessDeniedHandler(customAccessDeniedHandler)
-			.and()
 			.logout()
 			.logoutUrl(LOGOUT_ENDPOINT)
 			.logoutSuccessHandler(logoutSuccessHandler)
 			.and()
 			.addFilterBefore(usernamePasswordAuthFilter, ExceptionTranslationFilter.class)
 			.addFilterAfter(cookieAuthFilter,UsernamePasswordAuthFilter.class)
+			.addFilterBefore(authenticationExceptionHandler, UsernamePasswordAuthFilter.class)
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
 			.authorizeHttpRequests()

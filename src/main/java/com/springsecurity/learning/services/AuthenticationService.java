@@ -9,6 +9,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +46,7 @@ public class AuthenticationService {
 	public UserDto findByUsername(String username) {
 		User user = userRepository.findByUsername(username);
 		
-		if(user==null)throw new BadCredentialsException("Username not found");
+		if(user==null)throw new UsernameNotFoundException("Username not found");
 		
 		return new UserDto(user.getId(),user.getUsername());
 	}
@@ -57,7 +58,7 @@ public class AuthenticationService {
 		UserDto userDto = findByUsername(username);
 		
 		if(!hmac.equals(calculateHmac(username))) {
-			throw new RuntimeException("Invalid cookie");
+			throw new BadCredentialsException("Invalid cookie");
 		}
 		return userDto;
 	}

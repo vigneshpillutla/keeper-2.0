@@ -28,14 +28,12 @@ public class CookieAuthFilter extends OncePerRequestFilter {
 	private String COOKIE_NAME;
 
 	private AuthenticationManager authenticationManager;
-	private AuthenticationService authenticationService;
 
 	
 	
-	public CookieAuthFilter(AuthenticationManager authenticationManager, AuthenticationService authenticationService) {
+	public CookieAuthFilter(AuthenticationManager authenticationManager) {
 		super();
 		this.authenticationManager = authenticationManager;
-		this.authenticationService = authenticationService;
 	}
 
 
@@ -43,7 +41,6 @@ public class CookieAuthFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		
 		Optional<Cookie> cookieAuth = Stream.of(Optional.ofNullable(request.getCookies()).orElse(new Cookie[0]))
 				.filter(cookie -> COOKIE_NAME.equals(cookie.getName()))
 				.findFirst();
