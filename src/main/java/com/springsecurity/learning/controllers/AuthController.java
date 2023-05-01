@@ -56,8 +56,5 @@ public class AuthController {
 		return ResponseEntity.ok(response);
 	}
 	
-	@GetMapping("/test/secure")
-	public ResponseEntity<String> securePage(){
-		return ResponseEntity.ok("User is Logged In!");
-	}
+
 }
