@@ -1,25 +1,22 @@
-package com.springsecurity.learning.services;
+package com.keeper.api.services;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Base64;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
+import com.keeper.api.dao.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.springsecurity.learning.dao.UserRepository;
-import com.springsecurity.learning.dto.CredentialsDto;
-import com.springsecurity.learning.dto.UserDto;
-import com.springsecurity.learning.entities.User;
+import com.keeper.api.dto.CredentialsDto;
+import com.keeper.api.dto.UserDto;
+import com.keeper.api.entities.User;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.Setter;
 
 @Service

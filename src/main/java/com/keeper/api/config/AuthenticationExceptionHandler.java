@@ -1,18 +1,16 @@
-package com.springsecurity.learning.config;
+package com.keeper.api.config;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.keeper.api.services.ResponseWriterHelper;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.springsecurity.learning.services.ResponseWriterHelper;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -38,7 +36,7 @@ public class AuthenticationExceptionHandler extends OncePerRequestFilter {
 			Map<String, Object> responseData = new HashMap<>();
 			responseData.put("message", authenticationException.getMessage());
 			
-			ResponseWriterHelper.writeResponse(response, 
+			ResponseWriterHelper.writeResponse(response,
 					HttpStatus.FORBIDDEN.value(), responseData);
 		}
 		catch (Exception e) {

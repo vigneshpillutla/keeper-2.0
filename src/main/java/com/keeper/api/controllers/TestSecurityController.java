@@ -1,4 +1,4 @@
-package com.springsecurity.learning.controllers;
+package com.keeper.api.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

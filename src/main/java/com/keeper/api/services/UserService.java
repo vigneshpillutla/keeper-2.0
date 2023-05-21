@@ -1,12 +1,11 @@
-package com.springsecurity.learning.services;
+package com.keeper.api.services;
 
+import com.keeper.api.dao.UserRepository;
+import com.keeper.api.entities.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.springsecurity.learning.dao.UserRepository;
-import com.springsecurity.learning.dto.SignUpDto;
-import com.springsecurity.learning.dto.UserDto;
-import com.springsecurity.learning.entities.User;
+import com.keeper.api.dto.SignUpDto;
 
 import lombok.AllArgsConstructor;
 
@@ -17,8 +16,7 @@ public class UserService {
 	private BCryptPasswordEncoder passwordEncoder;
 	
 	public User getUser(String username) {
-		User user = userRepository.findByUsername(username);
-		return user;
+		return userRepository.findByUsername(username);
 	}
 	
 	public User saveUser(SignUpDto signUpDto) {

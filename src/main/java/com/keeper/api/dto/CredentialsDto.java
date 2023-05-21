@@ -1,4 +1,4 @@
-package com.springsecurity.learning.dto;
+package com.keeper.api.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

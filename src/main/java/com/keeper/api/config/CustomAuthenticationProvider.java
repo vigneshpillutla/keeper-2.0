@@ -1,12 +1,9 @@
-package com.springsecurity.learning.config;
+package com.keeper.api.config;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.keeper.api.services.AuthenticationService;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -14,9 +11,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
 import org.springframework.stereotype.Component;
 
-import com.springsecurity.learning.dto.CredentialsDto;
-import com.springsecurity.learning.dto.UserDto;
-import com.springsecurity.learning.services.AuthenticationService;
+import com.keeper.api.dto.CredentialsDto;
+import com.keeper.api.dto.UserDto;
 
 import lombok.AllArgsConstructor;
 

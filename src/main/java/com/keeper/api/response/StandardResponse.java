@@ -1,4 +1,4 @@
-package com.springsecurity.learning.response;
+package com.keeper.api.response;
 
 import lombok.Data;
 
