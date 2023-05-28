@@ -41,7 +41,7 @@ public class AuthenticationExceptionHandler extends OncePerRequestFilter {
 		}
 		catch (Exception e) {
 			// TODO: handle exception
-			
+			System.out.println(e.getMessage());
 			Map<String, Object> responseData = new HashMap<>();
 			responseData.put("message", "Something went wrong! Please try again");
 			

@@ -1,6 +1,7 @@
 package com.keeper.api.controllers;
 
 import com.keeper.api.dto.NoteDto;
+import com.keeper.api.entities.Note;
 import com.keeper.api.entities.User;
 import com.keeper.api.response.StandardResponse;
 import com.keeper.api.services.NoteService;
@@ -8,11 +9,9 @@ import com.keeper.api.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -36,5 +35,31 @@ public class NoteController {
         StandardResponse response = new StandardResponse(true,"Note Saved!",savedNote);
 
         return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping
+    public ResponseEntity<StandardResponse> updateNote(@RequestBody NoteDto noteDto){
+        NoteDto modifiedNote = noteService.updateNote(noteDto);
+        StandardResponse response = new StandardResponse(true,"Updated the note",modifiedNote);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<StandardResponse> getAllNotes(){
+        Authentication authentication  = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getPrincipal().toString();
+
+        List<NoteDto> noteDtos = noteService.getAllNotes(username);
+        StandardResponse response = new StandardResponse(true,noteDtos);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<StandardResponse> deleteNote(@RequestParam Integer id){
+        noteService.deleteNote(id);
+
+        return ResponseEntity.ok(new StandardResponse(true,"Note deleted"));
     }
 }
