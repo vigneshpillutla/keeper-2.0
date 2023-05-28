@@ -14,6 +14,11 @@ import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 import jakarta.servlet.http.Cookie;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity(debug = true)
@@ -21,7 +26,8 @@ public class SecurityConfig {
 	
 	private static final String LOGOUT_ENDPOINT = "/api/auth/logout";
 	
-	private String[] PUBLIC_URLS = {"/api/auth/login","/api/auth/signup",LOGOUT_ENDPOINT}; 
+	private final String[] PUBLIC_URLS = {"/api/auth/login","/api/auth/signup",LOGOUT_ENDPOINT,"/api/test/public"};
+	private final List<String> ALLOWED_DOMAINS = List.of("http://localhost:3000","https://keep-er.netlify.app");
 	
 	@Value("${session.cookieName}")
 	private String COOKIE_NAME;
@@ -29,6 +35,19 @@ public class SecurityConfig {
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	public CorsFilter corsFilter(){
+		UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+		CorsConfiguration corsConfiguration = new CorsConfiguration();
+
+		corsConfiguration.setAllowCredentials(true);
+		corsConfiguration.setAllowedOrigins(ALLOWED_DOMAINS);
+		corsConfiguration.addAllowedHeader("*");
+		corsConfiguration.addAllowedMethod("*");
+		urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
+		return new CorsFilter(urlBasedCorsConfigurationSource);
 	}
 	
 	@Bean
@@ -52,6 +71,7 @@ public class SecurityConfig {
         };
 		
 		httpSecurity
+				.cors().and()
 			.logout()
 			.logoutUrl(LOGOUT_ENDPOINT)
 			.logoutSuccessHandler(logoutSuccessHandler)
