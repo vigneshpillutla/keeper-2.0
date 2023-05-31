@@ -1,6 +1,7 @@
 package com.keeper.api.dto;
 
 import com.keeper.api.entities.Note;
+import com.keeper.api.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,8 +12,16 @@ import java.util.List;
 @NoArgsConstructor
 public class UserDto {
 	private int id;
-	private String username;
+	private String firstName,lastName,username;
 	private List<Note> notes;
+
+	public UserDto(User user){
+		this.id = user.getId();
+		this.firstName = user.getFirstName();
+		this.lastName = user.getLastName();
+		this.username = user.getUsername();
+		this.notes = user.getNotes();
+	}
 
 	public UserDto(int id, String username) {
 		this.id = id;

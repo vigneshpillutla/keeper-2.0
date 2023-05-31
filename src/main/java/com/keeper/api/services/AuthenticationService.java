@@ -7,6 +7,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
 import com.keeper.api.dao.UserRepository;
+import jakarta.servlet.http.Cookie;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,6 +30,9 @@ public class AuthenticationService {
 	
 	@Value("${session.secretKey}")
 	private String secretKey;
+
+	@Value("${session.cookieName}")
+	private String COOKIE_NAME;
 	
 	public AuthenticationService(BCryptPasswordEncoder passwordEncoder, UserRepository userRepository) {
 		super();
@@ -39,13 +43,29 @@ public class AuthenticationService {
 	public String createToken(String username) {
 		return username + "&" + calculateHmac(username);
 	}
+
+	public Cookie createCookie(String username,String path){
+		Cookie cookie = new Cookie(COOKIE_NAME,createToken(username));
+		cookie.setPath(path);
+		cookie.setMaxAge(604800);
+
+
+		return cookie;
+	}
+
+	public Cookie createCookie(String username,String path,int maxAge){
+		Cookie cookie = createCookie(username,path);
+		cookie.setMaxAge(maxAge);
+
+		return cookie;
+	}
 	
 	public UserDto findByUsername(String username) {
 		User user = userRepository.findByUsername(username);
 		
 		if(user==null)throw new UsernameNotFoundException("Username not found");
 		
-		return new UserDto(user.getId(),user.getUsername());
+		return new UserDto(user);
 	}
 	
 	public UserDto findByToken(String token) {

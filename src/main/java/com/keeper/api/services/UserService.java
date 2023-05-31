@@ -1,6 +1,7 @@
 package com.keeper.api.services;
 
 import com.keeper.api.dao.UserRepository;
+import com.keeper.api.dto.UserDto;
 import com.keeper.api.entities.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,12 @@ public class UserService {
 	
 	public User getUser(String username) {
 		return userRepository.findByUsername(username);
+	}
+
+	public UserDto getUserDto(String username){
+		User user = getUser(username);
+
+		return new UserDto(user);
 	}
 	
 	public User saveUser(SignUpDto signUpDto) {

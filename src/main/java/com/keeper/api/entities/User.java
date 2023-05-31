@@ -22,14 +22,18 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
+	private String firstName;
+	private String lastName;
 	@Column(name = "username")
 	private String username;
 	private String password;
 	@JsonManagedReference
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
 	private List<Note> notes;
 	
 	public User(SignUpDto signUpDto) {
+		this.firstName = signUpDto.getFirstName();
+		this.lastName = signUpDto.getLastName();
 		this.username = signUpDto.getUsername();
 		this.password = signUpDto.getPassword();
 		this.notes = new ArrayList<>();
