@@ -67,6 +67,8 @@ public class SecurityConfig {
 		LogoutSuccessHandler logoutSuccessHandler = (request, response, auth) -> {
 			Cookie sessionCookie = new Cookie(COOKIE_NAME, null);
 			sessionCookie.setMaxAge(0);
+			sessionCookie.setPath("/");
+
 			response.addCookie(sessionCookie);
         };
 		
